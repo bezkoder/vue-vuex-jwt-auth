@@ -9,7 +9,6 @@ class AuthService {
         username: user.username,
         password: user.password
       })
-      .then(this.handleResponse)
       .then(response => {
         if (response.data.accessToken) {
           localStorage.setItem('user', JSON.stringify(response.data));
@@ -29,18 +28,6 @@ class AuthService {
       email: user.email,
       password: user.password
     });
-  }
-
-  handleResponse(response) {
-    if (response.status === 401) {
-      this.logout();
-      location.reload(true);
-
-      const error = response.data && response.data.message;
-      return Promise.reject(error);
-    }
-
-    return Promise.resolve(response);
   }
 }
 

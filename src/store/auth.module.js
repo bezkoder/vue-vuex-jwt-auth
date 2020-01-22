@@ -3,7 +3,7 @@ import AuthService from '../services/auth.service';
 const user = JSON.parse(localStorage.getItem('user'));
 const initialState = user
   ? { status: { loggedIn: true }, user }
-  : { status: {}, user: null };
+  : { status: { loggedIn: false }, user: null };
 
 export const auth = {
   namespaced: true,
@@ -17,7 +17,7 @@ export const auth = {
         },
         error => {
           commit('loginFailure');
-          return Promise.reject(error.response.data);
+          return Promise.reject(error);
         }
       );
     },
@@ -33,29 +33,29 @@ export const auth = {
         },
         error => {
           commit('registerFailure');
-          return Promise.reject(error.response.data);
+          return Promise.reject(error);
         }
       );
     }
   },
   mutations: {
     loginSuccess(state, user) {
-      state.status = { loggedIn: true };
+      state.status.loggedIn = true;
       state.user = user;
     },
     loginFailure(state) {
-      state.status = {};
+      state.status.loggedIn = false;
       state.user = null;
     },
     logout(state) {
-      state.status = {};
+      state.status.loggedIn = false;
       state.user = null;
     },
     registerSuccess(state) {
-      state.status = {};
+      state.status.loggedIn = false;
     },
     registerFailure(state) {
-      state.status = {};
+      state.status.loggedIn = false;
     }
   }
 };
