@@ -26,7 +26,7 @@
 
 <script>
 export default {
-  name: 'profile',
+  name: 'Profile',
   computed: {
     currentUser() {
       return this.$store.state.auth.user;

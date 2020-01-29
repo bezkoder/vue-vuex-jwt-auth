@@ -11,43 +11,43 @@
           <div class="form-group">
             <label for="username">Username</label>
             <input
+              v-model="user.username"
+              v-validate="'required|min:3|max:20'"
               type="text"
               class="form-control"
               name="username"
-              v-model="user.username"
-              v-validate="'required|min:3|max:20'"
             />
             <div
-              class="alert-danger"
               v-if="submitted && errors.has('username')"
+              class="alert-danger"
             >{{errors.first('username')}}</div>
           </div>
           <div class="form-group">
             <label for="email">Email</label>
             <input
+              v-model="user.email"
+              v-validate="'required|email|max:50'"
               type="email"
               class="form-control"
               name="email"
-              v-model="user.email"
-              v-validate="'required|email|max:50'"
             />
             <div
-              class="alert-danger"
               v-if="submitted && errors.has('email')"
+              class="alert-danger"
             >{{errors.first('email')}}</div>
           </div>
           <div class="form-group">
             <label for="password">Password</label>
             <input
+              v-model="user.password"
+              v-validate="'required|min:6|max:40'"
               type="password"
               class="form-control"
               name="password"
-              v-model="user.password"
-              v-validate="'required|min:6|max:40'"
             />
             <div
-              class="alert-danger"
               v-if="submitted && errors.has('password')"
+              class="alert-danger"
             >{{errors.first('password')}}</div>
           </div>
           <div class="form-group">
@@ -57,9 +57,9 @@
       </form>
 
       <div
+        v-if="message"
         class="alert"
         :class="successful ? 'alert-success' : 'alert-danger'"
-        v-if="message"
       >{{message}}</div>
     </div>
   </div>
@@ -69,12 +69,7 @@
 import User from '../models/user';
 
 export default {
-  name: 'register',
-  computed: {
-    loggedIn() {
-      return this.$store.state.auth.status.loggedIn;
-    }
-  },
+  name: 'Register',
   data() {
     return {
       user: new User('', '', ''),
@@ -82,6 +77,11 @@ export default {
       successful: false,
       message: ''
     };
+  },
+  computed: {
+    loggedIn() {
+      return this.$store.state.auth.status.loggedIn;
+    }
   },
   mounted() {
     if (this.loggedIn) {
@@ -92,15 +92,18 @@ export default {
     handleRegister() {
       this.message = '';
       this.submitted = true;
-      this.$validator.validate().then(valid => {
-        if (valid) {
+      this.$validator.validate().then(isValid => {
+        if (isValid) {
           this.$store.dispatch('auth/register', this.user).then(
             data => {
               this.message = data.message;
               this.successful = true;
             },
             error => {
-              this.message = error.message;
+              this.message =
+                (error.response && error.response.data) ||
+                error.message ||
+                error.toString();
               this.successful = false;
             }
           );
