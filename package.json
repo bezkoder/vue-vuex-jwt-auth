@@ -14,7 +14,7 @@
     "axios": "^0.19.0",
     "bootstrap": "^4.3.1",
     "core-js": "^2.6.5",
-    "jquery": "^3.4.1",
+    "jquery": "^3.5.0",
     "popper.js": "^1.15.0",
     "vee-validate": "^2.2.15",
     "vue": "^2.6.10",
